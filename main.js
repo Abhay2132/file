@@ -37,5 +37,5 @@ worker.onmessage = e => {
 	_eval && eval(_eval);
 }
 */
-const sw = navigator.serviceWorker.register("/sw.js", {scope : "/"})
+const sw = navigator.serviceWorker.register("sw.js", {scope : "/"})
 
