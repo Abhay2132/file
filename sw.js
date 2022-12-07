@@ -7,10 +7,15 @@ self.addEventListener("activate", e => {
 });
 
 self.addEventListener("fetch", e => {
-	//console.log("fetching ", e.request?.url);
-	const {url = false} = e.request || {};
-	if(!url) return false;
-	const u = new URL(url);
-	if(u.pathname != "/file") return false;
-	e.respondWith(caches.match("/file"))
+	e.respondWith(sf(e));
 });
+
+async function sf(e) {
+	const res = await caches.match(e.request.url);
+	if(res) return res;
+	const cache = await caches.open("cache-v1")
+	const response = await fetch(e.request.url);
+	const clone = await response.clone();
+	cache.put(e.request, clone);
+	return response;
+}
